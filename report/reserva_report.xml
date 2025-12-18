@@ -160,30 +160,26 @@
                                     <tr>
                                         <td>Precio por Hora:</td>
                                         <td class="text-end">
-                                            <span t-field="o.precio_hora" 
-                                                  t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                            $<t t-esc="'%.2f' % o.precio_hora"/>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>Duración: <t t-esc="'%.1f' % o.duracion"/> horas</td>
                                         <td class="text-end">
-                                            <span t-field="o.subtotal" 
-                                                  t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                            $<t t-esc="'%.2f' % o.subtotal"/>
                                         </td>
                                     </tr>
                                     <tr t-if="o.descuento > 0">
                                         <td>Descuento (<t t-esc="'%.0f' % o.descuento"/>%):</td>
                                         <td class="text-end text-danger">
-                                            - <span t-field="o.monto_descuento" 
-                                                  t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                            - $<t t-esc="'%.2f' % o.monto_descuento"/>
                                         </td>
                                     </tr>
                                     <tr class="border-top">
                                         <td><strong>TOTAL:</strong></td>
                                         <td class="text-end">
                                             <strong>
-                                                <span t-field="o.total" 
-                                                      t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                                $<t t-esc="'%.2f' % o.total"/>
                                             </strong>
                                         </td>
                                     </tr>

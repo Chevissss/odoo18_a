@@ -74,6 +74,12 @@ class Reserva(models.Model):
     motivo_cancelacion = fields.Text(string='Motivo de Cancelación')
     
     # Precios
+    currency_id = fields.Many2one(
+        'res.currency',
+        string='Moneda',
+        default=lambda self: self.env.company.currency_id,
+        required=True
+    )
     precio_hora = fields.Float(
         string='Precio por Hora',
         related='cancha_id.precio_hora',
@@ -263,21 +269,6 @@ class Reserva(models.Model):
                 minimo_anticipacion = ahora + timedelta(hours=1)
                 if reserva.fecha_inicio < minimo_anticipacion:
                     raise ValidationError(_('Las reservas deben hacerse con al menos 1 hora de anticipación'))
-
-    def action_view_partner(self):
-            """
-            Este método permite que el botón de estadística (stat button)
-            en el formulario abra la ficha del cliente asociado.
-            """
-            self.ensure_one()
-            return {
-                'type': 'ir.actions.act_window',
-                'name': _('Cliente'),
-                'res_model': 'res.partner',
-                'view_mode': 'form',
-                'res_id': self.partner_id.id,
-                'target': 'current',
-            }
 
     def action_confirmar(self):
         for reserva in self:
