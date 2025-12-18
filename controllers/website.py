@@ -1,7 +1,7 @@
 from odoo import http, fields, _
 from odoo.http import request
 from odoo.exceptions import ValidationError, UserError
-from datetime import datetime
+import datetime
 
 
 class ReservaWebsiteController(http.Controller):
@@ -16,6 +16,7 @@ class ReservaWebsiteController(http.Controller):
         
         return request.render('reserva_canchas.website_canchas', {
             'canchas': canchas,
+            'datetime': datetime,
         })
 
     @http.route('/reserva/nueva', type='http', auth='user', website=True)
@@ -31,6 +32,7 @@ class ReservaWebsiteController(http.Controller):
         values = {
             'canchas': canchas,
             'cancha_id': int(cancha_id) if cancha_id else None,
+            'datetime': datetime,
         }
         
         return request.render('reserva_canchas.website_nueva_reserva', values)

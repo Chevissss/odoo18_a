@@ -16,6 +16,72 @@
         </xpath>
     </template>
 
+    <!-- Página pública: Lista de canchas -->
+    <template id="website_canchas" name="Canchas Disponibles">
+        <t t-call="website.layout">
+            <div class="container mt-5">
+                <h1>Canchas Disponibles</h1>
+                <div class="row mt-4">
+                    <t t-foreach="canchas" t-as="cancha">
+                        <div class="col-md-4 mb-4">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title"><t t-esc="cancha.name"/></h5>
+                                    <p class="card-text"><t t-esc="cancha.descripcion or ''"/></p>
+                                    <p class="card-text"><strong>Precio hora:</strong> $<t t-esc="'%.2f' % cancha.precio_hora"/></p>
+                                    <a t-attf-href="/reserva/nueva?cancha_id=#{cancha.id}" class="btn btn-primary">Reservar</a>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Página privada: Formulario para nueva reserva -->
+    <template id="website_nueva_reserva" name="Nueva Reserva">
+        <t t-call="website.layout">
+            <div class="container mt-5">
+                <h1>Reservar Cancha</h1>
+                <t t-if="error">
+                    <div class="alert alert-danger"><t t-esc="error"/></div>
+                </t>
+                <form action="/reserva/crear" method="post">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    <div class="mb-3">
+                        <label class="form-label">Cancha</label>
+                        <select name="cancha_id" class="form-select">
+                            <t t-foreach="canchas" t-as="cancha">
+                                <option t-att-value="cancha.id" t-att-selected="cancha_id and cancha_id==cancha.id and 'selected'">
+                                    <t t-esc="cancha.name"/>
+                                </option>
+                            </t>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Fecha inicio</label>
+                        <input type="datetime-local" name="fecha_inicio" class="form-control" required/>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Fecha fin</label>
+                        <input type="datetime-local" name="fecha_fin" class="form-control" required/>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Número de jugadores</label>
+                        <input type="number" name="numero_jugadores" class="form-control" min="1"/>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Notas</label>
+                        <textarea name="notas" class="form-control" rows="3"></textarea>
+                    </div>
+                    <button class="btn btn-primary" type="submit">Crear Reserva</button>
+                </form>
+            </div>
+        </t>
+    </template>
+
     <!-- Lista de Mis Reservas -->
     <template id="portal_my_reservas" name="Mis Reservas">
         <t t-call="portal.portal_layout">
