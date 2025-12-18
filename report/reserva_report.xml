@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Acción del Reporte -->
+    <record id="action_report_reserva" model="ir.actions.report">
+        <field name="name">Comprobante de Reserva</field>
+        <field name="model">reserva.reserva</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">reserva_canchas.report_reserva_document</field>
+        <field name="report_file">reserva_canchas.report_reserva_document</field>
+        <field name="print_report_name">'Reserva - %s' % object.name</field>
+        <field name="binding_model_id" ref="model_reserva_reserva"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- Template del Reporte -->
+    <template id="report_reserva_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <!-- Header -->
+                        <div class="row mb-4">
+                            <div class="col-8">
+                                <h2>Comprobante de Reserva</h2>
+                                <h3 class="text-primary">
+                                    <span t-field="o.name"/>
+                                </h3>
+                            </div>
+                            <div class="col-4 text-end">
+                                <t t-if="o.state == 'confirmada'">
+                                    <span class="badge bg-success fs-4">CONFIRMADA</span>
+                                </t>
+                                <t t-elif="o.state == 'completada'">
+                                    <span class="badge bg-primary fs-4">COMPLETADA</span>
+                                </t>
+                                <t t-elif="o.state == 'cancelada'">
+                                    <span class="badge bg-danger fs-4">CANCELADA</span>
+                                </t>
+                                <t t-else="">
+                                    <span class="badge bg-secondary fs-4">
+                                        <t t-esc="dict(o._fields['state'].selection)[o.state].upper()"/>
+                                    </span>
+                                </t>
+                            </div>
+                        </div>
+
+                        <!-- Información del Cliente -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h4 class="text-primary">Información del Cliente</h4>
+                                <hr/>
+                            </div>
+                            <div class="col-6">
+                                <strong>Cliente:</strong><br/>
+                                <span t-field="o.partner_id.name"/><br/>
+                                <t t-if="o.partner_id.email">
+                                    <i class="fa fa-envelope"/> <span t-field="o.partner_id.email"/><br/>
+                                </t>
+                                <t t-if="o.partner_id.phone">
+                                    <i class="fa fa-phone"/> <span t-field="o.partner_id.phone"/><br/>
+                                </t>
+                            </div>
+                            <div class="col-6">
+                                <strong>Fecha de Reserva:</strong><br/>
+                                <span t-field="o.fecha_creacion" 
+                                      t-options='{"widget": "datetime", "format": "dd/MM/yyyy HH:mm"}'/><br/>
+                                <t t-if="o.fecha_confirmacion">
+                                    <strong>Confirmada el:</strong><br/>
+                                    <span t-field="o.fecha_confirmacion" 
+                                          t-options='{"widget": "datetime", "format": "dd/MM/yyyy HH:mm"}'/><br/>
+                                </t>
+                            </div>
+                        </div>
+
+                        <!-- Información de la Cancha -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h4 class="text-primary">Detalles de la Reserva</h4>
+                                <hr/>
+                            </div>
+                            <div class="col-6">
+                                <table class="table table-sm">
+                                    <tr>
+                                        <td><strong>Cancha:</strong></td>
+                                        <td><span t-field="o.cancha_id.name"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Tipo:</strong></td>
+                                        <td>
+                                            <span t-esc="dict(o.cancha_id._fields['tipo_deporte'].selection)[o.cancha_id.tipo_deporte]"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Capacidad:</strong></td>
+                                        <td><span t-field="o.cancha_id.capacidad"/> personas</td>
+                                    </tr>
+                                    <t t-if="o.numero_jugadores">
+                                        <tr>
+                                            <td><strong>Jugadores:</strong></td>
+                                            <td><span t-field="o.numero_jugadores"/></td>
+                                        </tr>
+                                    </t>
+                                </table>
+                            </div>
+                            <div class="col-6">
+                                <table class="table table-sm">
+                                    <tr>
+                                        <td><strong>Fecha y Hora Inicio:</strong></td>
+                                        <td>
+                                            <span t-field="o.fecha_inicio" 
+                                                  t-options='{"widget": "datetime", "format": "dd/MM/yyyy HH:mm"}'/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Fecha y Hora Fin:</strong></td>
+                                        <td>
+                                            <span t-field="o.fecha_fin" 
+                                                  t-options='{"widget": "datetime", "format": "dd/MM/yyyy HH:mm"}'/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Duración:</strong></td>
+                                        <td>
+                                            <t t-esc="'%.1f' % o.duracion"/> horas
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Características de la Cancha -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h5>Características de la Cancha:</h5>
+                                <ul class="list-inline">
+                                    <li class="list-inline-item" t-if="o.cancha_id.tiene_techo">
+                                        <i class="fa fa-check text-success"/> Techada
+                                    </li>
+                                    <li class="list-inline-item" t-if="o.cancha_id.tiene_iluminacion">
+                                        <i class="fa fa-check text-success"/> Iluminación
+                                    </li>
+                                    <li class="list-inline-item" t-if="o.cancha_id.tiene_vestuarios">
+                                        <i class="fa fa-check text-success"/> Vestuarios
+                                    </li>
+                                    <li class="list-inline-item" t-if="o.cancha_id.tiene_estacionamiento">
+                                        <i class="fa fa-check text-success"/> Estacionamiento
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Información de Pago -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h4 class="text-primary">Información de Pago</h4>
+                                <hr/>
+                            </div>
+                            <div class="col-8">
+                                <table class="table table-sm">
+                                    <tr>
+                                        <td>Precio por Hora:</td>
+                                        <td class="text-end">
+                                            <span t-field="o.precio_hora" 
+                                                  t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Duración: <t t-esc="'%.1f' % o.duracion"/> horas</td>
+                                        <td class="text-end">
+                                            <span t-field="o.subtotal" 
+                                                  t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                        </td>
+                                    </tr>
+                                    <tr t-if="o.descuento > 0">
+                                        <td>Descuento (<t t-esc="'%.0f' % o.descuento"/>%):</td>
+                                        <td class="text-end text-danger">
+                                            - <span t-field="o.monto_descuento" 
+                                                  t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                        </td>
+                                    </tr>
+                                    <tr class="border-top">
+                                        <td><strong>TOTAL:</strong></td>
+                                        <td class="text-end">
+                                            <strong>
+                                                <span t-field="o.total" 
+                                                      t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                            </strong>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Estado de Pago:</strong></td>
+                                        <td class="text-end">
+                                            <t t-if="o.pagado">
+                                                <span class="badge bg-success">PAGADO</span>
+                                                <t t-if="o.metodo_pago">
+                                                    <br/>
+                                                    <small>
+                                                        Método: <t t-esc="dict(o._fields['metodo_pago'].selection)[o.metodo_pago]"/>
+                                                    </small>
+                                                </t>
+                                            </t>
+                                            <t t-else="">
+                                                <span class="badge bg-warning text-dark">PENDIENTE</span>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Notas -->
+                        <t t-if="o.notas">
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <h5>Notas:</h5>
+                                    <p><span t-field="o.notas"/></p>
+                                </div>
+                            </div>
+                        </t>
+
+                        <!-- QR Code (opcional) -->
+                        <div class="row mt-5">
+                            <div class="col-6">
+                                <p class="text-muted">
+                                    <small>
+                                        Documento generado el <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%d/%m/%Y %H:%M')"/>
+                                    </small>
+                                </p>
+                            </div>
+                            <div class="col-6 text-end">
+                                <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('QR', o.name, 100, 100)" 
+                                     style="width: 100px; height: 100px;"/>
+                            </div>
+                        </div>
+
+                        <!-- Términos y Condiciones -->
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <hr/>
+                                <h6>Términos y Condiciones:</h6>
+                                <ul class="small text-muted">
+                                    <li>Por favor llegue 10 minutos antes de su hora reservada.</li>
+                                    <li>Las cancelaciones deben hacerse con al menos 2 horas de anticipación.</li>
+                                    <li>En caso de no presentarse (No-Show), se puede aplicar penalización.</li>
+                                    <li>El tiempo de reserva incluye el tiempo de calentamiento y enfriamiento.</li>
+                                    <li>Es responsabilidad del cliente verificar el estado de la reserva antes de asistir.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- Reporte de Lista de Reservas del Día -->
+    <record id="action_report_reservas_dia" model="ir.actions.report">
+        <field name="name">Reservas del Día</field>
+        <field name="model">reserva.reserva</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">reserva_canchas.report_reservas_dia</field>
+        <field name="report_file">reserva_canchas.report_reservas_dia</field>
+        <field name="print_report_name">'Reservas del Día'</field>
+        <field name="binding_model_id" ref="model_reserva_reserva"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="report_reservas_dia">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <h2 class="text-center">Reservas del Día</h2>
+                    <p class="text-center text-muted">
+                        <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%d/%m/%Y')"/>
+                    </p>
+
+                    <table class="table table-sm table-bordered mt-4">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Hora</th>
+                                <th>Cancha</th>
+                                <th>Cliente</th>
+                                <th>Teléfono</th>
+                                <th>Estado</th>
+                                <th>Pagado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="docs" t-as="reserva">
+                                <tr>
+                                    <td>
+                                        <span t-field="reserva.fecha_inicio" 
+                                              t-options='{"widget": "datetime", "format": "HH:mm"}'/> - 
+                                        <span t-field="reserva.fecha_fin" 
+                                              t-options='{"widget": "datetime", "format": "HH:mm"}'/>
+                                    </td>
+                                    <td><span t-field="reserva.cancha_id.name"/></td>
+                                    <td><span t-field="reserva.partner_id.name"/></td>
+                                    <td><span t-field="reserva.partner_id.phone"/></td>
+                                    <td>
+                                        <t t-if="reserva.state == 'confirmada'">
+                                            <span class="badge bg-success">Confirmada</span>
+                                        </t>
+                                        <t t-elif="reserva.state == 'en_curso'">
+                                            <span class="badge bg-info">En Curso</span>
+                                        </t>
+                                        <t t-else="">
+                                            <span t-esc="dict(reserva._fields['state'].selection)[reserva.state]"/>
+                                        </t>
+                                    </td>
+                                    <td>
+                                        <t t-if="reserva.pagado">
+                                            <i class="fa fa-check text-success"/>
+                                        </t>
+                                        <t t-else="">
+                                            <i class="fa fa-times text-danger"/>
+                                        </t>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>
