@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vista Tree -->
+    <record id="view_horario_tree" model="ir.ui.view">
+        <field name="name">reserva.horario.list</field>
+        <field name="model">reserva.horario</field>
+        <field name="arch" type="xml">
+            <list string="Horarios">
+                <field name="cancha_id"/>
+                <field name="dia_semana"/>
+                <field name="hora_inicio" widget="float_time"/>
+                <field name="hora_fin" widget="float_time"/>
+                <field name="activo" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Vista Form -->
+    <record id="view_horario_form" model="ir.ui.view">
+        <field name="name">reserva.horario.form</field>
+        <field name="model">reserva.horario</field>
+        <field name="arch" type="xml">
+            <form string="Horario">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="cancha_id"/>
+                            <field name="dia_semana"/>
+                        </group>
+                        <group>
+                            <field name="hora_inicio" widget="float_time"/>
+                            <field name="hora_fin" widget="float_time"/>
+                            <field name="activo"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Acción -->
+    <record id="action_horario" model="ir.actions.act_window">
+        <field name="name">Horarios</field>
+        <field name="res_model">reserva.horario</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Configurar horarios de operación
+            </p>
+        </field>
+    </record>
+</odoo>

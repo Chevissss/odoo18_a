@@ -2,7 +2,7 @@
 <odoo>
     <!-- Vista Tree -->
     <record id="view_cancha_tree" model="ir.ui.view">
-        <field name="name">reserva.cancha.tree</field>
+        <field name="name">reserva.cancha.list</field>
         <field name="model">reserva.cancha</field>
         <field name="arch" type="xml">
             <list string="Canchas">
@@ -153,7 +153,7 @@
     <record id="action_cancha" model="ir.actions.act_window">
         <field name="name">Canchas</field>
         <field name="res_model">reserva.cancha</field>
-        <field name="view_mode">kanban,tree,form</field>
+        <field name="view_mode">kanban,list,form</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Crear tu primera cancha deportiva

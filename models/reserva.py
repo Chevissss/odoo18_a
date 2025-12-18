@@ -264,6 +264,21 @@ class Reserva(models.Model):
                 if reserva.fecha_inicio < minimo_anticipacion:
                     raise ValidationError(_('Las reservas deben hacerse con al menos 1 hora de anticipación'))
 
+    def action_view_partner(self):
+            """
+            Este método permite que el botón de estadística (stat button)
+            en el formulario abra la ficha del cliente asociado.
+            """
+            self.ensure_one()
+            return {
+                'type': 'ir.actions.act_window',
+                'name': _('Cliente'),
+                'res_model': 'res.partner',
+                'view_mode': 'form',
+                'res_id': self.partner_id.id,
+                'target': 'current',
+            }
+
     def action_confirmar(self):
         for reserva in self:
             if reserva.state != 'borrador':

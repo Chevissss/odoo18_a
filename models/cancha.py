@@ -116,7 +116,7 @@ class Cancha(models.Model):
             'name': _('Reservas de %s') % self.name,
             'type': 'ir.actions.act_window',
             'res_model': 'reserva.reserva',
-            'view_mode': 'tree,form,calendar',
+            'view_mode': 'list,form,calendar',
             'domain': [('cancha_id', '=', self.id)],
             'context': {'default_cancha_id': self.id}
         }
