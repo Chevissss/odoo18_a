@@ -62,11 +62,11 @@
 
                     <div class="mb-3">
                         <label class="form-label">Fecha inicio</label>
-                        <input type="datetime-local" name="fecha_inicio" class="form-control" required/>
+                        <input type="datetime-local" name="fecha_inicio" class="form-control" required="required"/>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Fecha fin</label>
-                        <input type="datetime-local" name="fecha_fin" class="form-control" required/>
+                        <input type="datetime-local" name="fecha_fin" class="form-control" required="required"/>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Número de jugadores</label>
