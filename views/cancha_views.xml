@@ -5,7 +5,7 @@
         <field name="name">reserva.cancha.tree</field>
         <field name="model">reserva.cancha</field>
         <field name="arch" type="xml">
-            <tree string="Canchas">
+            <list string="Canchas">
                 <field name="sequence" widget="handle"/>
                 <field name="code"/>
                 <field name="name"/>
@@ -16,7 +16,7 @@
                 <field name="disponible_web" widget="boolean_toggle"/>
                 <field name="total_reservas"/>
                 <field name="ingresos_totales" widget="monetary"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -71,17 +71,17 @@
                         </page>
                         <page string="Horarios de Operación">
                             <field name="horario_ids">
-                                <tree editable="bottom">
+                                <list editable="bottom">
                                     <field name="dia_semana"/>
                                     <field name="hora_inicio" widget="float_time"/>
                                     <field name="hora_fin" widget="float_time"/>
                                     <field name="activo" widget="boolean_toggle"/>
-                                </tree>
+                                </list>
                             </field>
                         </page>
                         <page string="Reservas" name="reservas">
                             <field name="reserva_ids" readonly="1">
-                                <tree>
+                                <list>
                                     <field name="name"/>
                                     <field name="partner_id"/>
                                     <field name="fecha_inicio"/>
@@ -91,7 +91,7 @@
                                            decoration-info="state == 'pendiente'"
                                            decoration-danger="state == 'cancelada'"/>
                                     <field name="total" widget="monetary"/>
-                                </tree>
+                                </list>
                             </field>
                         </page>
                     </notebook>

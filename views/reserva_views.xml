@@ -5,7 +5,7 @@
         <field name="name">reserva.reserva.tree</field>
         <field name="model">reserva.reserva</field>
         <field name="arch" type="xml">
-            <tree string="Reservas" decoration-success="state == 'confirmada'" 
+            <list string="Reservas" decoration-success="state == 'confirmada'" 
                   decoration-muted="state == 'cancelada'" 
                   decoration-info="state == 'en_curso'">
                 <field name="name"/>
@@ -21,7 +21,7 @@
                        decoration-warning="state == 'pendiente'"
                        decoration-danger="state == 'cancelada'"
                        decoration-info="state == 'en_curso'"/>
-            </tree>
+            </list>
         </field>
     </record>
 
