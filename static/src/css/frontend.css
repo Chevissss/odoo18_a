@@ -1,0 +1,144 @@
+/* Estilos para el portal web de reservas */
+
+/* Tarjetas de canchas */
+.cancha-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cancha-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+.cancha-image {
+    height: 200px;
+    object-fit: cover;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* Badges personalizados */
+.badge-deporte {
+    font-size: 0.85rem;
+    padding: 0.35em 0.65em;
+}
+
+/* Formulario de reserva */
+.reserva-form {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 2rem;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+}
+
+/* Calendario */
+.reserva-calendar {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Portal de usuario */
+.portal-sidebar {
+    background: #fff;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.reserva-item {
+    border-left: 4px solid #667eea;
+    padding-left: 1rem;
+    margin-bottom: 1rem;
+}
+
+.reserva-item.confirmada {
+    border-left-color: #28a745;
+}
+
+.reserva-item.cancelada {
+    border-left-color: #dc3545;
+}
+
+/* Estados de reserva */
+.estado-badge {
+    display: inline-block;
+    padding: 0.25em 0.6em;
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.25rem;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .cancha-card {
+        margin-bottom: 1.5rem;
+    }
+    
+    .reserva-form {
+        padding: 1rem;
+    }
+}
+
+/* Iconos de características */
+.caracteristica-icon {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 0.5rem;
+    color: #667eea;
+}
+
+/* Botones personalizados */
+.btn-reservar {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+}
+
+.btn-reservar:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    color: white;
+}
+
+/* Alertas personalizadas */
+.alert-reserva {
+    border-left: 4px solid #667eea;
+    background: #f0f3ff;
+}
+
+/* Loading spinner */
+.spinner-reserva {
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    vertical-align: text-bottom;
+    border: 0.25em solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: spinner-border 0.75s linear infinite;
+}
+
+@keyframes spinner-border {
+    to { transform: rotate(360deg); }
+}

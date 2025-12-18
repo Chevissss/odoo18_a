@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Agregar Reservas al Portal -->
+    <template id="portal_my_home_reservas" name="Portal My Home: Reservas" 
+              inherit_id="portal.portal_my_home" priority="30">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="before">
+            <t t-set="portal_reservas_count" t-value="reserva_count" t-if="reserva_count"/>
+        </xpath>
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="icon" t-value="'/reserva_canchas/static/description/icon.png'"/>
+                <t t-set="title">Reservas</t>
+                <t t-set="url" t-value="'/my/reservas'"/>
+                <t t-set="placeholder_count" t-value="'reserva_count'"/>
+            </t>
+        </xpath>
+    </template>
+
+    <!-- Lista de Mis Reservas -->
+    <template id="portal_my_reservas" name="Mis Reservas">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Reservas</t>
+            </t>
+
+            <t t-if="not reservas">
+                <div class="alert alert-info text-center mt-4" role="alert">
+                    <p class="mb-0">
+                        <i class="fa fa-calendar-o fa-2x mb-2"/>
+                        <br/>
+                        No tienes reservas registradas.
+                    </p>
+                    <a href="/reserva/canchas" class="btn btn-primary mt-3">
+                        <i class="fa fa-plus"/> Hacer una Reserva
+                    </a>
+                </div>
+            </t>
+            
+            <t t-if="reservas" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Número</th>
+                        <th>Cancha</th>
+                        <th>Fecha/Hora</th>
+                        <th>Duración</th>
+                        <th>Total</th>
+                        <th>Estado</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="reservas" t-as="reserva">
+                        <tr>
+                            <td>
+                                <a t-attf-href="/my/reservas/#{reserva.id}">
+                                    <t t-esc="reserva.name"/>
+                                </a>
+                            </td>
+                            <td><span t-field="reserva.cancha_id"/></td>
+                            <td>
+                                <span t-field="reserva.fecha_inicio" 
+                                      t-options='{"widget": "datetime", "format": "dd/MM/yyyy HH:mm"}'/>
+                            </td>
+                            <td>
+                                <t t-esc="'%.1f' % reserva.duracion"/> horas
+                            </td>
+                            <td>
+                                <span t-field="reserva.total" 
+                                      t-options='{"widget": "monetary", "display_currency": reserva.currency_id}'/>
+                            </td>
+                            <td>
+                                <t t-if="reserva.state == 'borrador'">
+                                    <span class="badge bg-secondary">Borrador</span>
+                                </t>
+                                <t t-elif="reserva.state == 'pendiente'">
+                                    <span class="badge bg-warning">Pendiente</span>
+                                </t>
+                                <t t-elif="reserva.state == 'confirmada'">
+                                    <span class="badge bg-success">Confirmada</span>
+                                </t>
+                                <t t-elif="reserva.state == 'en_curso'">
+                                    <span class="badge bg-info">En Curso</span>
+                                </t>
+                                <t t-elif="reserva.state == 'completada'">
+                                    <span class="badge bg-primary">Completada</span>
+                                </t>
+                                <t t-elif="reserva.state == 'cancelada'">
+                                    <span class="badge bg-danger">Cancelada</span>
+                                </t>
+                                <t t-else="">
+                                    <span class="badge bg-dark">No Show</span>
+                                </t>
+                            </td>
+                            <td class="text-end">
+                                <a t-attf-href="/my/reservas/#{reserva.id}" 
+                                   class="btn btn-sm btn-secondary">
+                                    <i class="fa fa-eye"/> Ver
+                                </a>
+                            </td>
+                        </tr>
+                    </t>
+                </tbody>
+            </t>
+        </t>
+    </template>
+
+    <!-- Detalle de Reserva -->
+    <template id="portal_reserva_detail" name="Detalle de Reserva">
+        <t t-call="portal.portal_layout">
+            <t t-call="portal.portal_record_layout">
+                <t t-set="card_header">
+                    <div class="row no-gutters">
+                        <div class="col-12">
+                            <h5 class="mb-0">
+                                Reserva <span t-field="reserva.name"/>
+                                <t t-if="reserva.state == 'confirmada'">
+                                    <span class="badge bg-success ms-2">Confirmada</span>
+                                </t>
+                                <t t-elif="reserva.state == 'cancelada'">
+                                    <span class="badge bg-danger ms-2">Cancelada</span>
+                                </t>
+                            </h5>
+                        </div>
+                    </div>
+                </t>
+                
+                <t t-set="card_body">
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h4>Información de la Reserva</h4>
+                            <hr/>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <strong>Cancha:</strong>
+                            <p><span t-field="reserva.cancha_id"/></p>
+                            
+                            <strong>Fecha y Hora Inicio:</strong>
+                            <p>
+                                <span t-field="reserva.fecha_inicio" 
+                                      t-options='{"widget": "datetime", "format": "dd/MM/yyyy HH:mm"}'/>
+                            </p>
+                            
+                            <strong>Fecha y Hora Fin:</strong>
+                            <p>
+                                <span t-field="reserva.fecha_fin" 
+                                      t-options='{"widget": "datetime", "format": "dd/MM/yyyy HH:mm"}'/>
+                            </p>
+                            
+                            <strong>Duración:</strong>
+                            <p><t t-esc="'%.1f' % reserva.duracion"/> horas</p>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <strong>Estado:</strong>
+                            <p>
+                                <t t-if="reserva.state == 'confirmada'">
+                                    <span class="badge bg-success">Confirmada</span>
+                                </t>
+                                <t t-elif="reserva.state == 'cancelada'">
+                                    <span class="badge bg-danger">Cancelada</span>
+                                </t>
+                                <t t-else="">
+                                    <span class="badge bg-secondary">
+                                        <span t-field="reserva.state"/>
+                                    </span>
+                                </t>
+                            </p>
+                            
+                            <strong>Precio por Hora:</strong>
+                            <p>
+                                <span t-field="reserva.precio_hora" 
+                                      t-options='{"widget": "monetary"}'/>
+                            </p>
+                            
+                            <strong>Total:</strong>
+                            <p class="fs-4">
+                                <span t-field="reserva.total" 
+                                      t-options='{"widget": "monetary"}'/>
+                            </p>
+                            
+                            <t t-if="reserva.numero_jugadores">
+                                <strong>Número de Jugadores:</strong>
+                                <p><span t-field="reserva.numero_jugadores"/></p>
+                            </t>
+                        </div>
+                    </div>
+
+                    <t t-if="reserva.notas">
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <strong>Notas:</strong>
+                                <p><span t-field="reserva.notas"/></p>
+                            </div>
+                        </div>
+                    </t>
+
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <a href="/my/reservas" class="btn btn-secondary">
+                                <i class="fa fa-arrow-left"/> Volver a Mis Reservas
+                            </a>
+                            
+                            <t t-if="reserva.puede_cancelar">
+                                <button type="button" class="btn btn-danger" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#cancelModal">
+                                    <i class="fa fa-times"/> Cancelar Reserva
+                                </button>
+                            </t>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+
+        <!-- Modal de Cancelación -->
+        <div class="modal fade" id="cancelModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Cancelar Reserva</h5>
+                        <button type="button" class="btn-close" 
+                                data-bs-dismiss="modal"></button>
+                    </div>
+                    <form t-attf-action="/my/reservas/#{reserva.id}/cancelar" method="POST">
+                        <input type="hidden" name="csrf_token" 
+                               t-att-value="request.csrf_token()"/>
+                        <div class="modal-body">
+                            <p>¿Estás seguro de que deseas cancelar esta reserva?</p>
+                            <div class="mb-3">
+                                <label for="motivo" class="form-label">Motivo (opcional)</label>
+                                <textarea name="motivo" id="motivo" class="form-control" 
+                                          rows="3" placeholder="Razón de la cancelación..."></textarea>
+                            </div>
+                            <div class="alert alert-warning">
+                                <i class="fa fa-exclamation-triangle"/> 
+                                Esta acción no se puede deshacer.
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" 
+                                    data-bs-dismiss="modal">No, mantener reserva</button>
+                            <button type="submit" class="btn btn-danger">
+                                Sí, cancelar reserva
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </template>
+</odoo>

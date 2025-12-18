@@ -1,0 +1,10 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_cancha_admin,access.cancha.admin,model_reserva_cancha,group_reserva_admin,1,1,1,1
+access_cancha_staff,access.cancha.staff,model_reserva_cancha,group_reserva_staff,1,0,0,0
+access_cancha_portal,access.cancha.portal,model_reserva_cancha,group_reserva_portal_user,1,0,0,0
+access_reserva_admin,access.reserva.admin,model_reserva_reserva,group_reserva_admin,1,1,1,1
+access_reserva_staff,access.reserva.staff,model_reserva_reserva,group_reserva_staff,1,1,1,0
+access_reserva_portal,access.reserva.portal,model_reserva_reserva,group_reserva_portal_user,1,0,1,0
+access_horario_admin,access.horario.admin,model_reserva_horario,group_reserva_admin,1,1,1,1
+access_horario_staff,access.horario.staff,model_reserva_horario,group_reserva_staff,1,0,0,0
+access_horario_portal,access.horario.portal,model_reserva_horario,group_reserva_portal_user,1,0,0,0

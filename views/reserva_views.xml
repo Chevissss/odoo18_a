@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vista Tree -->
+    <record id="view_reserva_tree" model="ir.ui.view">
+        <field name="name">reserva.reserva.tree</field>
+        <field name="model">reserva.reserva</field>
+        <field name="arch" type="xml">
+            <tree string="Reservas" decoration-success="state == 'confirmada'" 
+                  decoration-muted="state == 'cancelada'" 
+                  decoration-info="state == 'en_curso'">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="cancha_id"/>
+                <field name="fecha_inicio"/>
+                <field name="fecha_fin"/>
+                <field name="duracion" widget="float_time"/>
+                <field name="total" widget="monetary"/>
+                <field name="pagado" widget="boolean_toggle"/>
+                <field name="state" widget="badge" 
+                       decoration-success="state == 'confirmada'"
+                       decoration-warning="state == 'pendiente'"
+                       decoration-danger="state == 'cancelada'"
+                       decoration-info="state == 'en_curso'"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vista Form -->
+    <record id="view_reserva_form" model="ir.ui.view">
+        <field name="name">reserva.reserva.form</field>
+        <field name="model">reserva.reserva</field>
+        <field name="arch" type="xml">
+            <form string="Reserva">
+                <header>
+                    <button name="action_confirmar" type="object" 
+                            string="Confirmar" class="oe_highlight" 
+                            invisible="state != 'borrador'" 
+                            groups="reserva_canchas.group_reserva_staff"/>
+                    <button name="action_iniciar" type="object" 
+                            string="Iniciar" class="oe_highlight" 
+                            invisible="state != 'confirmada'" 
+                            groups="reserva_canchas.group_reserva_staff"/>
+                    <button name="action_completar" type="object" 
+                            string="Completar" class="oe_highlight" 
+                            invisible="state != 'en_curso'" 
+                            groups="reserva_canchas.group_reserva_staff"/>
+                    <button name="action_cancelar" type="object" 
+                            string="Cancelar" 
+                            invisible="not puede_cancelar"/>
+                    <button name="action_marcar_no_show" type="object" 
+                            string="No Show" 
+                            invisible="state not in ['confirmada', 'en_curso']" 
+                            groups="reserva_canchas.group_reserva_staff"/>
+                    <field name="state" widget="statusbar" 
+                           statusbar_visible="borrador,pendiente,confirmada,completada"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object" 
+                                name="action_view_partner" icon="fa-user" 
+                                groups="reserva_canchas.group_reserva_staff">
+                            <field name="partner_id" widget="statinfo" 
+                                   string="Cliente"/>
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" title="Cancelada" 
+                            bg_color="text-bg-danger" 
+                            invisible="state != 'cancelada'"/>
+                    <widget name="web_ribbon" title="Completada" 
+                            bg_color="text-bg-success" 
+                            invisible="state != 'completada'"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="partner_id" readonly="state in ['completada', 'cancelada']"/>
+                            <field name="cancha_id" readonly="state in ['completada', 'cancelada']" 
+                                   options="{'no_create': True}"/>
+                            <field name="numero_jugadores"/>
+                            <field name="user_id" groups="reserva_canchas.group_reserva_staff"/>
+                        </group>
+                        <group>
+                            <field name="fecha_inicio" readonly="state in ['completada', 'cancelada']"/>
+                            <field name="fecha_fin" readonly="state in ['completada', 'cancelada']"/>
+                            <field name="duracion" widget="float_time"/>
+                            <field name="puede_cancelar" invisible="1"/>
+                            <field name="puede_editar" invisible="1"/>
+                            <field name="es_pasada" invisible="1"/>
+                        </group>
+                    </group>
+                    <group string="Información de Pago">
+                        <group>
+                            <field name="precio_hora" widget="monetary" readonly="1"/>
+                            <field name="subtotal" widget="monetary" readonly="1"/>
+                            <field name="descuento" groups="reserva_canchas.group_reserva_staff"/>
+                            <field name="monto_descuento" widget="monetary" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="total" widget="monetary" readonly="1" 
+                                   class="oe_subtotal_footer_separator"/>
+                            <field name="pagado" widget="boolean_toggle"/>
+                            <field name="metodo_pago" invisible="not pagado"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Notas">
+                            <field name="notas" placeholder="Información adicional sobre la reserva..."/>
+                        </page>
+                        <page string="Información Adicional" 
+                              groups="reserva_canchas.group_reserva_staff">
+                            <group>
+                                <group>
+                                    <field name="fecha_creacion"/>
+                                    <field name="fecha_confirmacion"/>
+                                </group>
+                                <group>
+                                    <field name="fecha_cancelacion"/>
+                                    <field name="motivo_cancelacion" 
+                                           invisible="state != 'cancelada'"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vista Calendar -->
+    <record id="view_reserva_calendar" model="ir.ui.view">
+        <field name="name">reserva.reserva.calendar</field>
+        <field name="model">reserva.reserva</field>
+        <field name="arch" type="xml">
+            <calendar string="Calendario de Reservas" 
+                      date_start="fecha_inicio" 
+                      date_stop="fecha_fin" 
+                      color="cancha_id" 
+                      mode="week">
+                <field name="partner_id"/>
+                <field name="cancha_id"/>
+                <field name="state"/>
+            </calendar>
+        </field>
+    </record>
+
+    <!-- Vista Pivot -->
+    <record id="view_reserva_pivot" model="ir.ui.view">
+        <field name="name">reserva.reserva.pivot</field>
+        <field name="model">reserva.reserva</field>
+        <field name="arch" type="xml">
+            <pivot string="Análisis de Reservas">
+                <field name="cancha_id" type="row"/>
+                <field name="fecha_inicio" interval="month" type="col"/>
+                <field name="total" type="measure"/>
+                <field name="duracion" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Vista Graph -->
+    <record id="view_reserva_graph" model="ir.ui.view">
+        <field name="name">reserva.reserva.graph</field>
+        <field name="model">reserva.reserva</field>
+        <field name="arch" type="xml">
+            <graph string="Gráfico de Reservas" type="bar">
+                <field name="cancha_id"/>
+                <field name="total" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Acción -->
+    <record id="action_reserva" model="ir.actions.act_window">
+        <field name="name">Reservas</field>
+        <field name="res_model">reserva.reserva</field>
+        <field name="view_mode">tree,form,calendar,pivot,graph</field>
+        <field name="context">{'search_default_activas': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Crear una nueva reserva
+            </p>
+            <p>
+                Gestiona las reservas de canchas deportivas.
+            </p>
+        </field>
+    </record>
+
+    <!-- Búsquedas y Filtros -->
+    <record id="view_reserva_search" model="ir.ui.view">
+        <field name="name">reserva.reserva.search</field>
+        <field name="model">reserva.reserva</field>
+        <field name="arch" type="xml">
+            <search string="Buscar Reservas">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="cancha_id"/>
+                <filter string="Borradores" name="borrador" 
+                        domain="[('state', '=', 'borrador')]"/>
+                <filter string="Confirmadas" name="confirmada" 
+                        domain="[('state', '=', 'confirmada')]"/>
+                <filter string="En Curso" name="en_curso" 
+                        domain="[('state', '=', 'en_curso')]"/>
+                <filter string="Activas" name="activas" 
+                        domain="[('state', 'in', ['borrador', 'pendiente', 'confirmada', 'en_curso'])]"/>
+                <separator/>
+                <filter string="Hoy" name="hoy" 
+                        domain="[('fecha_inicio', '&gt;=', context_today().strftime('%Y-%m-%d 00:00:00')), 
+                                 ('fecha_inicio', '&lt;=', context_today().strftime('%Y-%m-%d 23:59:59'))]"/>
+                <filter string="Esta Semana" name="esta_semana" 
+                        domain="[('fecha_inicio', '&gt;=', (context_today() - relativedelta(weeks=0, weekday=0)).strftime('%Y-%m-%d')),
+                                 ('fecha_inicio', '&lt;=', (context_today() + relativedelta(weeks=0, weekday=6)).strftime('%Y-%m-%d'))]"/>
+                <separator/>
+                <filter string="Pagadas" name="pagadas" 
+                        domain="[('pagado', '=', True)]"/>
+                <filter string="Pendiente Pago" name="pendiente_pago" 
+                        domain="[('pagado', '=', False)]"/>
+                <separator/>
+                <filter string="Mis Reservas" name="mis_reservas" 
+                        domain="[('partner_id', '=', uid)]"/>
+                <group expand="0" string="Agrupar por">
+                    <filter string="Cancha" name="group_cancha" 
+                            context="{'group_by': 'cancha_id'}"/>
+                    <filter string="Cliente" name="group_partner" 
+                            context="{'group_by': 'partner_id'}"/>
+                    <filter string="Estado" name="group_state" 
+                            context="{'group_by': 'state'}"/>
+                    <filter string="Fecha" name="group_fecha" 
+                            context="{'group_by': 'fecha_inicio:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+</odoo>

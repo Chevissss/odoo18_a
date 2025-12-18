@@ -1,0 +1,540 @@
+/* Estilos personalizados para el backend de Reserva de Canchas */
+
+/* ============================================
+   VISTAS DE LISTA (Tree View)
+   ============================================ */
+
+/* Resaltar reservas según estado */
+.o_list_view .o_data_row.text-success {
+    background-color: #d4edda !important;
+}
+
+.o_list_view .o_data_row.text-muted {
+    background-color: #f8f9fa !important;
+    opacity: 0.7;
+}
+
+.o_list_view .o_data_row.text-info {
+    background-color: #d1ecf1 !important;
+}
+
+/* ============================================
+   VISTA DE FORMULARIO (Form View)
+   ============================================ */
+
+/* Mejorar visualización de tarjetas */
+.o_form_view .oe_title h1 {
+    color: #667eea;
+    font-weight: 600;
+}
+
+/* Sección de estadísticas */
+.o_form_view .oe_button_box {
+    margin-bottom: 15px;
+}
+
+.o_form_view .oe_stat_button {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white !important;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.o_form_view .oe_stat_button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+}
+
+.o_form_view .oe_stat_button .o_stat_info {
+    color: white !important;
+}
+
+/* ============================================
+   VISTA KANBAN
+   ============================================ */
+
+/* Tarjetas de canchas */
+.o_kanban_view .o_kanban_record {
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    border: 1px solid #e0e0e0;
+}
+
+.o_kanban_view .o_kanban_record:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.o_kanban_view .o_kanban_image {
+    border-radius: 8px 8px 0 0;
+    overflow: hidden;
+}
+
+.o_kanban_view .oe_kanban_details {
+    padding: 12px;
+}
+
+.o_kanban_view .o_kanban_record_title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 5px;
+}
+
+.o_kanban_view .o_kanban_record_subtitle {
+    color: #667eea;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+/* Badges personalizados en Kanban */
+.o_kanban_view .badge {
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-weight: 500;
+    font-size: 0.85rem;
+}
+
+/* ============================================
+   VISTA CALENDARIO
+   ============================================ */
+
+/* Personalizar eventos del calendario */
+.o_calendar_view .fc-event {
+    border-radius: 6px;
+    padding: 4px 8px;
+    border-left: 4px solid;
+}
+
+.o_calendar_view .fc-event.o_event_color_0 {
+    border-left-color: #667eea;
+    background-color: rgba(102, 126, 234, 0.2);
+}
+
+.o_calendar_view .fc-event.o_event_color_10 {
+    border-left-color: #28a745;
+    background-color: rgba(40, 167, 69, 0.2);
+}
+
+.o_calendar_view .fc-event.o_event_color_1 {
+    border-left-color: #dc3545;
+    background-color: rgba(220, 53, 69, 0.2);
+}
+
+/* Hoy resaltado */
+.o_calendar_view .fc-day.fc-today {
+    background-color: rgba(102, 126, 234, 0.1) !important;
+}
+
+/* ============================================
+   BADGES Y ESTADOS
+   ============================================ */
+
+/* Badges de estado personalizados */
+.badge.o_tag_color_0 {
+    background-color: #667eea !important;
+    color: white !important;
+}
+
+.badge.o_tag_color_10 {
+    background-color: #28a745 !important;
+    color: white !important;
+}
+
+.badge.o_tag_color_1 {
+    background-color: #dc3545 !important;
+    color: white !important;
+}
+
+.badge.o_tag_color_2 {
+    background-color: #ffc107 !important;
+    color: #212529 !important;
+}
+
+.badge.o_tag_color_7 {
+    background-color: #17a2b8 !important;
+    color: white !important;
+}
+
+/* ============================================
+   BOTONES PERSONALIZADOS
+   ============================================ */
+
+/* Botones de acción principales */
+.o_form_view .oe_highlight {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: white;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.o_form_view .oe_highlight:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+/* Botón de cancelar */
+.o_form_view .btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+    transition: all 0.3s ease;
+}
+
+.o_form_view .btn-secondary:hover {
+    background-color: #5a6268;
+    transform: translateY(-2px);
+}
+
+/* ============================================
+   BARRA DE ESTADO (Statusbar)
+   ============================================ */
+
+/* Mejorar visualización del statusbar */
+.o_form_view .o_statusbar_status button {
+    border-radius: 20px;
+    padding: 8px 16px;
+    margin: 0 4px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.o_form_view .o_statusbar_status button.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+}
+
+.o_form_view .o_statusbar_status button.disabled {
+    opacity: 0.5;
+}
+
+.o_form_view .o_statusbar_status button:not(.disabled):hover {
+    transform: scale(1.05);
+}
+
+/* ============================================
+   NOTEBOOK (Pestañas)
+   ============================================ */
+
+/* Mejorar pestañas */
+.o_form_view .o_notebook .nav-tabs {
+    border-bottom: 2px solid #667eea;
+}
+
+.o_form_view .o_notebook .nav-tabs .nav-link {
+    color: #667eea;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: none;
+    border-bottom: 3px solid transparent;
+}
+
+.o_form_view .o_notebook .nav-tabs .nav-link:hover {
+    border-bottom-color: #667eea;
+    background-color: rgba(102, 126, 234, 0.05);
+}
+
+.o_form_view .o_notebook .nav-tabs .nav-link.active {
+    color: #667eea;
+    border-bottom-color: #667eea;
+    background-color: rgba(102, 126, 234, 0.1);
+}
+
+/* ============================================
+   CAMPOS DE FORMULARIO
+   ============================================ */
+
+/* Mejorar campos monetarios */
+.o_form_view .o_field_monetary {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #28a745;
+}
+
+/* Campos de fecha/hora */
+.o_form_view .o_field_date,
+.o_form_view .o_field_datetime {
+    font-weight: 500;
+}
+
+/* Boolean toggles */
+.o_form_view .o_field_boolean .custom-switch {
+    padding-left: 2.5rem;
+}
+
+.o_form_view .o_field_boolean .custom-control-input:checked ~ .custom-control-label::before {
+    background-color: #667eea;
+    border-color: #667eea;
+}
+
+/* ============================================
+   CHATTER (Mensajes y actividades)
+   ============================================ */
+
+.o_form_view .oe_chatter {
+    border-top: 3px solid #667eea;
+    margin-top: 20px;
+    padding-top: 20px;
+}
+
+.o_form_view .oe_chatter .o_ChatterTopbar {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+
+/* ============================================
+   RIBBONS (Cintas de estado)
+   ============================================ */
+
+.o_form_view .o_ribbon {
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 8px 15px;
+    border-radius: 0 0 8px 0;
+}
+
+/* ============================================
+   VISTA PIVOT
+   ============================================ */
+
+.o_pivot_view table {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.o_pivot_view thead {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.o_pivot_view tbody tr:hover {
+    background-color: rgba(102, 126, 234, 0.1);
+}
+
+/* ============================================
+   VISTA GRÁFICO
+   ============================================ */
+
+.o_graph_view .o_graph_canvas_container {
+    border-radius: 12px;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* ============================================
+   FILTROS Y BÚSQUEDA
+   ============================================ */
+
+.o_control_panel .o_searchview {
+    border-radius: 25px;
+    border: 2px solid #e0e0e0;
+    transition: all 0.3s ease;
+}
+
+.o_control_panel .o_searchview:focus-within {
+    border-color: #667eea;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+}
+
+.o_control_panel .o_searchview_facet {
+    background-color: #667eea;
+    color: white;
+    border-radius: 15px;
+}
+
+/* ============================================
+   PAGINADOR
+   ============================================ */
+
+.o_cp_pager {
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    padding: 5px 10px;
+}
+
+/* ============================================
+   ALERTAS Y NOTIFICACIONES
+   ============================================ */
+
+.alert-info {
+    background-color: #e7f3ff;
+    border-left: 4px solid #667eea;
+    border-radius: 8px;
+}
+
+.alert-warning {
+    background-color: #fff3cd;
+    border-left: 4px solid #ffc107;
+    border-radius: 8px;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    border-left: 4px solid #dc3545;
+    border-radius: 8px;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    border-left: 4px solid #28a745;
+    border-radius: 8px;
+}
+
+/* ============================================
+   WIDGETS PERSONALIZADOS
+   ============================================ */
+
+/* Widget de imagen */
+.o_form_view .o_field_image img {
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Widget de muchos a muchos */
+.o_form_view .o_field_many2many .o_tag {
+    background-color: #667eea;
+    color: white;
+    border-radius: 12px;
+    padding: 4px 12px;
+    margin: 2px;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+    .o_form_view .oe_button_box {
+        flex-direction: column;
+    }
+    
+    .o_form_view .oe_stat_button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    
+    .o_kanban_view .o_kanban_record {
+        margin-bottom: 15px;
+    }
+}
+
+/* ============================================
+   ANIMACIONES
+   ============================================ */
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.o_form_view .o_form_sheet {
+    animation: slideIn 0.3s ease-in-out;
+}
+
+/* ============================================
+   MODO OSCURO (Si está habilitado)
+   ============================================ */
+
+.o_dark_mode .o_form_view .o_form_sheet {
+    background-color: #2d2d2d;
+    color: #e0e0e0;
+}
+
+.o_dark_mode .o_kanban_view .o_kanban_record {
+    background-color: #3d3d3d;
+    border-color: #4d4d4d;
+}
+
+.o_dark_mode .o_list_view tbody tr {
+    background-color: #2d2d2d;
+}
+
+/* ============================================
+   UTILIDADES
+   ============================================ */
+
+/* Separadores visuales */
+.o_horizontal_separator {
+    border-top: 2px solid #667eea;
+    margin: 20px 0;
+    position: relative;
+}
+
+.o_horizontal_separator::before {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 4px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 2px;
+}
+
+/* Resaltado de campos requeridos */
+.o_form_view .o_required_modifier input,
+.o_form_view .o_required_modifier select {
+    border-left: 3px solid #667eea;
+}
+
+/* Tooltips personalizados */
+.o_form_view [data-tooltip]:hover::after {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 6px;
+    padding: 8px 12px;
+}
+
+/* ============================================
+   VISTA DE NO CONTENIDO
+   ============================================ */
+
+.o_view_nocontent {
+    text-align: center;
+    padding: 60px 0;
+}
+
+.o_view_nocontent .o_view_nocontent_smiling_face {
+    font-size: 4rem;
+    color: #667eea;
+    margin-bottom: 20px;
+}
+
+.o_view_nocontent h3 {
+    color: #667eea;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.o_view_nocontent p {
+    color: #6c757d;
+    max-width: 500px;
+    margin: 0 auto 30px;
+}
+
+/* ============================================
+   IMPRESIÓN
+   ============================================ */
+
+@media print {
+    .o_form_view .oe_button_box,
+    .o_form_view .oe_chatter,
+    .o_control_panel {
+        display: none !important;
+    }
+    
+    .o_form_view .o_form_sheet {
+        box-shadow: none;
+        padding: 0;
+    }
+}

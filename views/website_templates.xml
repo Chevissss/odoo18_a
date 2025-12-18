@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Página Principal de Reservas -->
+    <template id="website_canchas" name="Reserva de Canchas">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure">
+                <div class="container mt-4 mb-5">
+                    <div class="row">
+                        <div class="col-12">
+                            <h1 class="text-center mb-4">Reserva tu Cancha Deportiva</h1>
+                            <p class="text-center lead mb-5">
+                                Encuentra la cancha perfecta para tu deporte favorito
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Filtros -->
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            <select id="filtro_deporte" class="form-select">
+                                <option value="">Todos los deportes</option>
+                                <option value="futbol">Fútbol</option>
+                                <option value="tenis">Tenis</option>
+                                <option value="basquet">Básquetbol</option>
+                                <option value="voley">Vóleibol</option>
+                                <option value="paddle">Pádel</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="date" id="filtro_fecha" class="form-control" 
+                                   t-att-min="datetime.date.today().isoformat()"/>
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-primary w-100" id="btn_buscar">
+                                <i class="fa fa-search"/> Buscar Disponibilidad
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Lista de Canchas -->
+                    <div class="row" id="canchas_container">
+                        <t t-foreach="canchas" t-as="cancha">
+                            <div class="col-md-4 mb-4">
+                                <div class="card h-100 shadow-sm">
+                                    <t t-if="cancha.image_1920">
+                                        <img t-att-src="'data:image/png;base64,%s' % cancha.image_1920.decode('utf-8')" 
+                                             class="card-img-top" alt="Cancha" style="height: 200px; object-fit: cover;"/>
+                                    </t>
+                                    <t t-else="">
+                                        <div class="card-img-top bg-secondary text-white d-flex align-items-center justify-content-center" 
+                                             style="height: 200px;">
+                                            <i class="fa fa-futbol fa-4x"/>
+                                        </div>
+                                    </t>
+                                    <div class="card-body">
+                                        <h5 class="card-title">
+                                            <t t-esc="cancha.name"/>
+                                        </h5>
+                                        <p class="card-text">
+                                            <span class="badge bg-primary">
+                                                <t t-esc="dict(cancha._fields['tipo_deporte'].selection)[cancha.tipo_deporte]"/>
+                                            </span>
+                                        </p>
+                                        <ul class="list-unstyled">
+                                            <li>
+                                                <i class="fa fa-users"/> Capacidad: <t t-esc="cancha.capacidad"/> personas
+                                            </li>
+                                            <li>
+                                                <i class="fa fa-money"/> 
+                                                <strong>$<t t-esc="'%.2f' % cancha.precio_hora"/>/hora</strong>
+                                            </li>
+                                            <li t-if="cancha.tiene_techo">
+                                                <i class="fa fa-check text-success"/> Techada
+                                            </li>
+                                            <li t-if="cancha.tiene_iluminacion">
+                                                <i class="fa fa-lightbulb-o text-warning"/> Iluminación
+                                            </li>
+                                        </ul>
+                                        <a t-attf-href="/reserva/nueva?cancha_id=#{cancha.id}" 
+                                           class="btn btn-primary w-100 mt-2">
+                                            Reservar Ahora
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </div>
+
+                    <t t-if="not canchas">
+                        <div class="row">
+                            <div class="col-12 text-center py-5">
+                                <i class="fa fa-calendar-times-o fa-5x text-muted mb-3"/>
+                                <h3>No hay canchas disponibles</h3>
+                                <p class="text-muted">Por favor contacta con nosotros para más información</p>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Formulario de Nueva Reserva -->
+    <template id="website_nueva_reserva" name="Nueva Reserva">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure">
+                <div class="container mt-4 mb-5">
+                    <div class="row">
+                        <div class="col-lg-8 offset-lg-2">
+                            <h1 class="mb-4">Nueva Reserva</h1>
+                            
+                            <form action="/reserva/crear" method="POST" class="o_website_form" 
+                                  data-model_name="reserva.reserva">
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <h4>Información de la Cancha</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-3">
+                                            <label for="cancha_id" class="form-label">Cancha*</label>
+                                            <select name="cancha_id" id="cancha_id" 
+                                                    class="form-select" required="required">
+                                                <option value="">Selecciona una cancha...</option>
+                                                <t t-foreach="canchas" t-as="cancha">
+                                                    <option t-att-value="cancha.id" 
+                                                            t-att-selected="cancha_id == cancha.id">
+                                                        <t t-esc="cancha.name"/> - $<t t-esc="'%.2f' % cancha.precio_hora"/>/hora
+                                                    </option>
+                                                </t>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <h4>Fecha y Horario</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label for="fecha_inicio" class="form-label">Fecha y Hora Inicio*</label>
+                                                <input type="datetime-local" name="fecha_inicio" 
+                                                       id="fecha_inicio" class="form-control" 
+                                                       required="required" 
+                                                       t-att-min="datetime.datetime.now().strftime('%Y-%m-%dT%H:%M')"/>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label for="fecha_fin" class="form-label">Fecha y Hora Fin*</label>
+                                                <input type="datetime-local" name="fecha_fin" 
+                                                       id="fecha_fin" class="form-control" 
+                                                       required="required"/>
+                                            </div>
+                                        </div>
+                                        <div class="alert alert-info">
+                                            <i class="fa fa-info-circle"/> 
+                                            Las reservas deben hacerse con al menos 1 hora de anticipación.
+                                            Duración mínima: 30 minutos. Duración máxima: 8 horas.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <h4>Información Adicional</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-3">
+                                            <label for="numero_jugadores" class="form-label">Número de Jugadores</label>
+                                            <input type="number" name="numero_jugadores" 
+                                                   id="numero_jugadores" class="form-control" 
+                                                   min="1" placeholder="Ej: 10"/>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="notas" class="form-label">Notas</label>
+                                            <textarea name="notas" id="notas" class="form-control" 
+                                                      rows="3" placeholder="Información adicional..."></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="d-grid gap-2">
+                                    <button type="submit" class="btn btn-primary btn-lg">
+                                        <i class="fa fa-check"/> Confirmar Reserva
+                                    </button>
+                                    <a href="/reserva/canchas" class="btn btn-secondary">
+                                        <i class="fa fa-times"/> Cancelar
+                                    </a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Controlador Web -->
+    <record id="website_menu_canchas" model="website.menu">
+        <field name="name">Reserva de Canchas</field>
+        <field name="url">/reserva/canchas</field>
+        <field name="parent_id" ref="website.main_menu"/>
+        <field name="sequence">50</field>
+    </record>
+</odoo>
